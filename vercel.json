@@ -9,14 +9,18 @@
       }
     },
     {
-      "src": "server/index.js",
-      "use": "@vercel/node"
+      "src": "api/*.js",
+      "use": "@vercel/edge"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/server/index.js"
+      "src": "/api/generate-document",
+      "dest": "/api/generate-document.js"
+    },
+    {
+      "src": "/api/efile-status",
+      "dest": "/api/efile-status.js"
     },
     {
       "src": "/(.*)",
