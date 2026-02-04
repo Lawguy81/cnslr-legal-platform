@@ -4,99 +4,52 @@ import { legalTasks } from '../data/legalTasks';
 
 function HomePage() {
   return (
-    <>
-      <section className="hero">
-        <h1>Legal Tasks Made Simple</h1>
-        <p>
-          Handle everyday legal matters with confidence. Our step-by-step guides
-          walk you through each process — just like filing your taxes.
-        </p>
-        <Link to="/task/parking-ticket" className="btn btn-primary btn-lg">
-          Get Started Free
-        </Link>
+    <div className="home-page">
+      <header className="hero">
+        <div className="hero-badge">✨ TurboTax for Legal</div>
+        <h1>Handle Legal Matters<br />Without the Legal Fees</h1>
+        <p>Step-by-step guidance for everyday legal tasks. Answer simple questions, get court-ready documents.</p>
+        <div className="hero-buttons">
+          <Link to="/signup" className="btn btn-primary btn-large">Get Started Free</Link>
+          <Link to="/login" className="btn btn-secondary btn-large">Sign In</Link>
+        </div>
+      </header>
+
+      <section className="tasks-section">
+        <h2>What do you need help with?</h2>
+        <div className="task-grid">
+          {legalTasks.map(task => (
+            <Link to={`/task/${task.id}`} key={task.id} className="task-card">
+              <span className="task-icon">{task.icon}</span>
+              <h3>{task.title}</h3>
+              <p>{task.description}</p>
+              <span className="task-time">{task.estimatedTime}</span>
+            </Link>
+          ))}
+        </div>
       </section>
 
-      <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Choose Your Legal Task</h2>
-
-      <div className="tasks-grid">
-        {legalTasks.map((task) => (
-          <Link to={`/task/${task.id}`} key={task.id} className="task-card">
-            <div className="task-icon" style={{ background: task.color }}>
-              {task.icon}
-            </div>
-            <h3>{task.title}</h3>
-            <p>{task.description}</p>
-            <div className="task-time">
-              <span>⏱️</span>
-              <span>{task.estimatedTime}</span>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <section style={{
-        background: 'white',
-        borderRadius: '12px',
-        padding: '2rem',
-        boxShadow: 'var(--shadow)',
-        marginTop: '2rem'
-      }}>
-        <h2 style={{ marginBottom: '1.5rem' }}>How It Works</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{
-              width: '48px',
-              height: '48px',
-              background: '#eff6ff',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem',
-              fontSize: '1.5rem'
-            }}>1</div>
-            <h4 style={{ marginBottom: '0.5rem' }}>Answer Questions</h4>
-            <p style={{ color: 'var(--gray-500)', fontSize: '0.875rem' }}>
-              Simple questions guide you through your specific situation
-            </p>
+      <section className="how-it-works">
+        <h2>How It Works</h2>
+        <div className="steps">
+          <div className="step">
+            <div className="step-number">1</div>
+            <h3>Answer Questions</h3>
+            <p>Simple questions about your situation</p>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{
-              width: '48px',
-              height: '48px',
-              background: '#eff6ff',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem',
-              fontSize: '1.5rem'
-            }}>2</div>
-            <h4 style={{ marginBottom: '0.5rem' }}>Review & Edit</h4>
-            <p style={{ color: 'var(--gray-500)', fontSize: '0.875rem' }}>
-              See your completed documents and make any needed changes
-            </p>
+          <div className="step">
+            <div className="step-number">2</div>
+            <h3>Review Documents</h3>
+            <p>We generate the right legal forms</p>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{
-              width: '48px',
-              height: '48px',
-              background: '#eff6ff',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem',
-              fontSize: '1.5rem'
-            }}>3</div>
-            <h4 style={{ marginBottom: '0.5rem' }}>Submit</h4>
-            <p style={{ color: 'var(--gray-500)', fontSize: '0.875rem' }}>
-              Download for manual submission or e-file where available
-            </p>
+          <div className="step">
+            <div className="step-number">3</div>
+            <h3>File or Submit</h3>
+            <p>E-file or print and mail</p>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
