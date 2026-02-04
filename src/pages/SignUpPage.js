@@ -33,9 +33,9 @@ function SignUpPage() {
     return (
       <div className="auth-container">
         <div className="auth-card">
-          <h2>Check your email</h2>
+          <h2>Check Your Email</h2>
           <p>We sent a confirmation link to {email}</p>
-          <Link to="/login" className="btn btn-primary">Back to Login</Link>
+          <Link to="/login" className="btn-primary">Go to Login</Link>
         </div>
       </div>
     );
@@ -45,33 +45,22 @@ function SignUpPage() {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Create Account</h2>
-        <p className="auth-subtitle">Start resolving your legal matters</p>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Full Name</label>
-            <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-          </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
-          </div>
-          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-            {loading ? 'Creating account...' : 'Sign Up'}
-          </button>
+          <input type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <button type="submit" className="btn-primary" disabled={loading}>{loading ? 'Creating...' : 'Sign Up'}</button>
         </form>
         <div className="auth-divider"><span>or</span></div>
-        <button onClick={handleGoogleSignUp} className="btn btn-google btn-block">
-          Continue with Google
-        </button>
-        <p className="auth-footer">Already have an account? <Link to="/login">Sign in</Link></p>
+        <button onClick={handleGoogleSignUp} className="btn-google">Continue with Google</button>
+        <p className="auth-link">Already have an account? <Link to="/login">Log in</Link></p>
       </div>
     </div>
   );
+}
+
+export default SignUpPage;
 }
 
 export default SignUpPage;
