@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CNSLR - Legal Tasks Made Simple</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #1e429f;
+      --primary-light: #3f83f8;
+      --success: #059669;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+    }
+    .header {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    .main-content {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-radius: 16px;
+      margin-bottom: 3rem;
+    }
+    .hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+    .hero p { font-size: 1.25rem; color: var(--gray-600); max-width: 600px; margin: 0 auto 2rem; }
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .task-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-light);
+    }
+    .task-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .task-card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .task-card p { color: var(--gray-500); font-size: 0.875rem; }
+    .task-time { display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; font-size: 0.75rem; color: var(--gray-400); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: white; color: var(--gray-700); border: 1px solid var(--gray-300); }
+    .btn-secondary:hover { background: var(--gray-50); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-lg { padding: 1rem 2rem; font-size: 1.125rem; }
+    .wizard-container { max-width: 800px; margin: 0 auto; }
+    .wizard-header {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .wizard-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; }
+    .progress-bar { height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); transition: width 0.3s; }
+    .progress-text { display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--gray-500); margin-top: 0.5rem; }
+    .wizard-content {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      min-height: 400px;
+    }
+    .step-content h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step-description { color: var(--gray-500); margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--gray-700); margin-bottom: 0.5rem; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      transition: all 0.2s;
+      background: white;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+    }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .option-cards { display: grid; gap: 1rem; }
+    .option-card {
+      display: flex;
+      align-items: flex-start;
+      padding: 1rem 1.25rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option-card:hover { border-color: var(--gray-300); background: var(--gray-50); }
+    .option-card.selected { border-color: var(--primary); background: #eff6ff; }
+    .option-card input { margin-right: 1rem; margin-top: 0.25rem; }
+    .option-content h4 { font-size: 1rem; font-weight: 500; margin-bottom: 0.25rem; }
+    .option-content p { font-size: 0.875rem; color: var(--gray-500); }
+    .wizard-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+    }
+    .review-section {
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .review-section h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .review-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .review-item:last-child { border-bottom: none; }
+    .review-label { color: var(--gray-600); }
+    .review-value { font-weight: 500; text-align: right; max-width: 60%; }
+    .success-container { text-align: center; padding: 3rem 2rem; }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--success), #10b981);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2.5rem;
+      color: white;
+    }
+    .success-container h2 { font-size: 1.75rem; margin-bottom: 0.75rem; }
+    .success-container > p { color: var(--gray-500); margin-bottom: 2rem; }
+    .download-options { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box.success { background: #d1fae5; border-color: #6ee7b7; }
+    .info-icon { font-size: 1.25rem; flex-shrink: 0; }
+    .info-content p { font-size: 0.875rem; color: var(--gray-700); }
+    .footer {
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      padding: 2rem;
+      text-align: center;
+      color: var(--gray-500);
+      font-size: 0.875rem;
+    }
+    .hidden { display: none !important; }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.75rem; }
+      .hero p { font-size: 1rem; }
+      .tasks-grid { grid-template-columns: 1fr; }
+      .wizard-nav { flex-direction: column; gap: 1rem; }
+      .wizard-nav .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo" onclick="showHome()">
+        <div class="logo-icon">C</div>
+        CNSLR
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- HOME PAGE -->
+    <div id="home-page">
+      <section class="hero">
+        <h1>Legal Tasks Made Simple</h1>
+        <p>Handle everyday legal matters with confidence. Our step-by-step guides walk you through each process — just like filing your taxes.</p>
+        <button class="btn btn-primary btn-lg" onclick="startTask('parking-ticket')">Get Started Free</button>
+      </section>
+
+      <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Choose Your Legal Task</h2>
+
+      <div class="tasks-grid">
+        <div class="task-card" onclick="startTask('parking-ticket')">
+          <div class="task-icon" style="background: #fee2e2;">🅿️</div>
+          <h3>Contest a Parking Ticket</h3>
+          <p>Fight unfair parking citations with a formal appeal letter and supporting evidence.</p>
+          <div class="task-time"><span>⏱️</span><span>10-15 minutes</span></div>
+        </div>
+        <div class="task-card" onclick="startTask('small-claims')">
+          <div class="task-icon" style="background: #dbeafe;">⚖️</div>
+          <h3>File Small Claims</h3>
+          <p>Recover money owed to you through small claims court — no lawyer needed.</p>
+          <div class="task-time"><span>⏱️</span><span>20-30 minutes</span></div>
+        </div>
+        <div class="task-card" onclick="startTask('demand-letter')">
+          <div class="task-icon" style="background: #fef3c7;">📧</div>
+          <h3>Send a Demand Letter</h3>
+          <p>Create a formal demand letter to request payment or action before legal proceedings.</p>
+          <div class="task-time"><span>⏱️</span><span>10-15 minutes</span></div>
+        </div>
+        <div class="task-card" onclick="startTask('name-change')">
+          <div class="task-icon" style="background: #d1fae5;">✏️</div>
+          <h3>Legal Name Change</h3>
+          <p>File a petition to legally change your name with the court.</p>
+          <div class="task-time"><span>⏱️</span><span>15-20 minutes</span></div>
+        </div>
+        <div class="task-card" onclick="startTask('landlord-dispute')">
+          <div class="task-icon" style="background: #e0e7ff;">🏠</div>
+          <h3>Landlord/Tenant Dispute</h3>
+          <p>Address issues with your landlord including repairs, deposits, or lease violations.</p>
+          <div class="task-time"><span>⏱️</span><span>15-20 minutes</span></div>
+        </div>
+      </div>
+
+      <section style="background: white; border-radius: 12px; padding: 2rem; box-shadow: var(--shadow);">
+        <h2 style="margin-bottom: 1.5rem;">How It Works</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+          <div style="text-align: center;">
+            <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">1</div>
+            <h4 style="margin-bottom: 0.5rem;">Answer Questions</h4>
+            <p style="color: var(--gray-500); font-size: 0.875rem;">Simple questions guide you through your specific situation</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">2</div>
+            <h4 style="margin-bottom: 0.5rem;">Review & Edit</h4>
+            <p style="color: var(--gray-500); font-size: 0.875rem;">See your completed documents and make any needed changes</p>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem;">3</div>
+            <h4 style="margin-bottom: 0.5rem;">Submit</h4>
+            <p style="color: var(--gray-500); font-size: 0.875rem;">Download for manual submission or e-file where available</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- WIZARD PAGE -->
+    <div id="wizard-page" class="hidden">
+      <div class="wizard-container">
+        <div class="wizard-header">
+          <h1 class="wizard-title" id="wizard-title">Contest a Parking Ticket</h1>
+          <div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+            </div>
+            <div class="progress-text">
+              <span id="step-indicator">Step 1 of 5</span>
+              <span id="progress-percent">20% complete</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-content">
+          <div class="step-content">
+            <h2 id="step-title">Ticket Information</h2>
+            <p class="step-description" id="step-description">Enter details from your parking ticket</p>
+
+            <div id="form-container"></div>
+
+            <div class="wizard-nav">
+              <button class="btn btn-secondary" id="back-btn" onclick="goBack()">← Back</button>
+              <button class="btn btn-primary" id="next-btn" onclick="goNext()">Continue →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS PAGE -->
+    <div id="success-page" class="hidden">
+      <div class="wizard-container">
+        <div class="wizard-content">
+          <div class="success-container">
+            <div class="success-icon">✓</div>
+            <h2>Your Documents Are Ready!</h2>
+            <p>We've prepared your documents based on your information. Download them below to proceed with your submission.</p>
+
+            <div class="download-options">
+              <button class="btn btn-primary btn-lg" onclick="downloadDoc('pdf')">📄 Download PDF</button>
+              <button class="btn btn-secondary btn-lg" onclick="downloadDoc('docx')">📝 Download Word</button>
+              <button class="btn btn-success btn-lg" onclick="showEfileModal()">⚡ E-File Now</button>
+            </div>
+          </div>
+
+          <div style="margin-top: 3rem;">
+            <h3 style="margin-bottom: 1.5rem;">📋 Next Steps</h3>
+            <div class="info-box">
+              <span class="info-icon">⏰</span>
+              <div class="info-content">
+                <p><strong>Important:</strong> Most jurisdictions require appeals within 30-60 days of the citation date.</p>
+              </div>
+            </div>
+            <div style="background: var(--gray-50); border-radius: 8px; padding: 1.5rem;">
+              <ol style="padding-left: 1.5rem; margin: 0;">
+                <li style="padding: 0.5rem 0;">Download your appeal letter (PDF or Word format)</li>
+                <li style="padding: 0.5rem 0;">Print and sign the letter where indicated</li>
+                <li style="padding: 0.5rem 0;">Make copies of any supporting evidence</li>
+                <li style="padding: 0.5rem 0;">Submit to your local parking authority</li>
+                <li style="padding: 0.5rem 0;">Keep a copy for your records</li>
+              </ol>
+            </div>
+            <div class="info-box success" style="margin-top: 1.5rem;">
+              <span class="info-icon">💡</span>
+              <div class="info-content">
+                <p><strong>Pro Tip:</strong> Send your appeal via certified mail to have proof of delivery.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--gray-200);">
+            <button class="btn btn-secondary" onclick="showHome()">← Back to Home</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 CNSLR. Empowering everyday legal tasks. Not a law firm.</p>
+  </footer>
+
+  <script>
+    // Task definitions
+    const tasks = {
+      'parking-ticket': {
+        title: 'Contest a Parking Ticket',
+        steps: [
+          { id: 'ticket-info', title: 'Ticket Information', description: 'Enter details from your parking ticket' },
+          { id: 'violation-details', title: 'Violation Details', description: 'Tell us about the circumstances' },
+          { id: 'defense-reason', title: 'Your Defense', description: 'Select your reason for contesting' },
+          { id: 'evidence', title: 'Supporting Evidence', description: 'Add photos or documents (optional)' },
+          { id: 'review', title: 'Review & Submit', description: 'Review your appeal before submitting' }
+        ],
+        fields: {
+          'ticket-info': [
+            { name: 'ticketNumber', label: 'Ticket/Citation Number', type: 'text', required: true, placeholder: 'e.g., PCT-2024-123456' },
+            { name: 'ticketDate', label: 'Date of Ticket', type: 'date', required: true },
+            { name: 'ticketTime', label: 'Time on Ticket', type: 'time', required: true },
+            { name: 'fineAmount', label: 'Fine Amount ($)', type: 'number', required: true, placeholder: '65' }
+          ],
+          'violation-details': [
+            { name: 'location', label: 'Location of Violation', type: 'text', required: true, placeholder: 'Street address where ticket was issued' },
+            { name: 'violationType', label: 'Type of Violation', type: 'select', required: true, options: [
+              { value: '', label: 'Select violation type...' },
+              { value: 'expired-meter', label: 'Expired Meter' },
+              { value: 'no-parking-zone', label: 'No Parking Zone' },
+              { value: 'street-cleaning', label: 'Street Cleaning' },
+              { value: 'overtime-parking', label: 'Overtime Parking' }
+            ]},
+            { name: 'circumstances', label: 'Describe what happened', type: 'textarea', required: true, placeholder: 'Explain the circumstances...' }
+          ],
+          'defense-reason': [
+            { name: 'defenseType', label: 'Primary Reason for Contest', type: 'radio', required: true, options: [
+              { value: 'signage', label: 'Missing or Unclear Signage', description: 'Signs were not visible or confusing' },
+              { value: 'meter-malfunction', label: 'Meter Malfunction', description: 'Parking meter was broken' },
+              { value: 'medical-emergency', label: 'Medical Emergency', description: 'You had a medical emergency' },
+              { value: 'factual-error', label: 'Factual Error on Ticket', description: 'Wrong date, time, or vehicle info' }
+            ]}
+          ],
+          'evidence': [
+            { name: 'hasPhotos', label: 'Do you have photos to support your case?', type: 'radio', required: true, options: [
+              { value: 'yes', label: 'Yes, I have photos', description: 'Photos of signage, meter, etc.' },
+              { value: 'no', label: 'No photos available', description: 'Continue without photos' }
+            ]},
+            { name: 'hasReceipts', label: 'Do you have receipts or documents?', type: 'radio', required: true, options: [
+              { value: 'yes', label: 'Yes, I have documents', description: 'Meter receipts, permits, etc.' },
+              { value: 'no', label: 'No documents', description: 'Continue without documents' }
+            ]}
+          ]
+        }
+      }
+    };
+
+    // State
+    let currentTask = null;
+    let currentStepIndex = 0;
+    let formData = {};
+
+    // Navigation
+    function showHome() {
+      document.getElementById('home-page').classList.remove('hidden');
+      document.getElementById('wizard-page').classList.add('hidden');
+      document.getElementById('success-page').classList.add('hidden');
+      currentTask = null;
+      currentStepIndex = 0;
+      formData = {};
+    }
+
+    function startTask(taskId) {
+      currentTask = tasks[taskId] || tasks['parking-ticket'];
+      currentStepIndex = 0;
+      formData = {};
+
+      document.getElementById('home-page').classList.add('hidden');
+      document.getElementById('wizard-page').classList.remove('hidden');
+      document.getElementById('success-page').classList.add('hidden');
+
+      renderStep();
+    }
+
+    function renderStep() {
+      const step = currentTask.steps[currentStepIndex];
+      const totalSteps = currentTask.steps.length;
+      const progress = ((currentStepIndex + 1) / totalSteps) * 100;
+
+      document.getElementById('wizard-title').textContent = currentTask.title;
+      document.getElementById('step-title').textContent = step.title;
+      document.getElementById('step-description').textContent = step.description;
+      document.getElementById('progress-fill').style.width = progress + '%';
+      document.getElementById('step-indicator').textContent = `Step ${currentStepIndex + 1} of ${totalSteps}`;
+      document.getElementById('progress-percent').textContent = Math.round(progress) + '% complete';
+
+      // Update buttons
+      document.getElementById('back-btn').textContent = currentStepIndex === 0 ? '← Exit' : '← Back';
+
+      const isReview = step.id === 'review';
+      const isLast = currentStepIndex === totalSteps - 1;
+      document.getElementById('next-btn').textContent = isLast ? 'Submit & Generate Documents 📄' : 'Continue →';
+      document.getElementById('next-btn').className = isLast ? 'btn btn-success' : 'btn btn-primary';
+
+      // Render form
+      const container = document.getElementById('form-container');
+
+      if (isReview) {
+        container.innerHTML = renderReview();
+      } else {
+        const fields = currentTask.fields[step.id] || [];
+        container.innerHTML = fields.map(renderField).join('');
+      }
+    }
+
+    function renderField(field) {
+      const value = formData[field.name] || '';
+
+      if (field.type === 'text' || field.type === 'date' || field.type === 'time' || field.type === 'number') {
+        return `
+          <div class="form-group">
+            <label class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+            <input type="${field.type}" class="form-input" name="${field.name}" value="${value}"
+                   placeholder="${field.placeholder || ''}" onchange="updateField('${field.name}', this.value)">
+          </div>
+        `;
+      }
+
+      if (field.type === 'textarea') {
+        return `
+          <div class="form-group">
+            <label class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+            <textarea class="form-textarea" name="${field.name}" placeholder="${field.placeholder || ''}"
+                      onchange="updateField('${field.name}', this.value)">${value}</textarea>
+          </div>
+        `;
+      }
+
+      if (field.type === 'select') {
+        return `
+          <div class="form-group">
+            <label class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+            <select class="form-select" name="${field.name}" onchange="updateField('${field.name}', this.value)">
+              ${field.options.map(opt => `<option value="${opt.value}" ${value === opt.value ? 'selected' : ''}>${opt.label}</option>`).join('')}
+            </select>
+          </div>
+        `;
+      }
+
+      if (field.type === 'radio') {
+        return `
+          <div class="form-group">
+            <label class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+            <div class="option-cards">
+              ${field.options.map(opt => `
+                <label class="option-card ${value === opt.value ? 'selected' : ''}" onclick="selectOption('${field.name}', '${opt.value}', this)">
+                  <input type="radio" name="${field.name}" value="${opt.value}" ${value === opt.value ? 'checked' : ''}>
+                  <div class="option-content">
+                    <h4>${opt.label}</h4>
+                    ${opt.description ? `<p>${opt.description}</p>` : ''}
+                  </div>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      return '';
+    }
+
+    function renderReview() {
+      const sections = currentTask.steps.slice(0, -1).map(step => {
+        const fields = currentTask.fields[step.id] || [];
+        const items = fields.map(field => {
+          let value = formData[field.name] || '—';
+          if (field.options) {
+            const opt = field.options.find(o => o.value === value);
+            value = opt ? opt.label : value;
+          }
+          return `<div class="review-item"><span class="review-label">${field.label}</span><span class="review-value">${value}</span></div>`;
+        }).join('');
+
+        return `<div class="review-section"><h4>${step.title}</h4>${items}</div>`;
+      }).join('');
+
+      return `
+        <div class="info-box success" style="margin-bottom: 2rem;">
+          <span class="info-icon">✅</span>
+          <div class="info-content">
+            <p><strong>You're almost done!</strong> Review your information below. You can go back to make changes if needed.</p>
+          </div>
+        </div>
+        ${sections}
+      `;
+    }
+
+    function updateField(name, value) {
+      formData[name] = value;
+    }
+
+    function selectOption(name, value, element) {
+      formData[name] = value;
+      // Update visual selection
+      element.parentElement.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    function goBack() {
+      if (currentStepIndex === 0) {
+        showHome();
+      } else {
+        currentStepIndex--;
+        renderStep();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function goNext() {
+      if (currentStepIndex === currentTask.steps.length - 1) {
+        // Submit
+        document.getElementById('wizard-page').classList.add('hidden');
+        document.getElementById('success-page').classList.remove('hidden');
+        window.scrollTo(0, 0);
+      } else {
+        currentStepIndex++;
+        renderStep();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function downloadDoc(format) {
+      // Generate document content
+      let content = `CNSLR LEGAL DOCUMENT\n\nDocument Type: Parking Ticket Appeal\nGenerated: ${new Date().toLocaleString()}\n\n`;
+
+      Object.entries(formData).forEach(([key, value]) => {
+        const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+        content += `${label}: ${value}\n`;
+      });
+
+      // Create download
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `parking-appeal-${Date.now()}.${format === 'pdf' ? 'txt' : 'txt'}`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      alert(`Your ${format.toUpperCase()} document has been downloaded!\n\n(Note: This demo generates a text preview. The full app creates properly formatted PDF/DOCX files.)`);
+    }
+
+    function showEfileModal() {
+      alert('E-Filing Coming Soon!\n\nWe\'re working on integrating with local court e-filing systems. Sign up to be notified when it\'s available in your area.');
+    }
+  </script>
+</body>
+</html>
