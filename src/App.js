@@ -10,14 +10,16 @@ import DashboardPage from './pages/DashboardPage';
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/task/:taskId" element={<TaskWizard />} />
-        <Route path="/success" element={<SuccessPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-      </Routes>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/task/:taskId" element={<TaskWizard />} />
+          <Route path="/success" element={<SuccessPage />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
