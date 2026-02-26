@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { getTaskById } from '../data/legalTasks';
 
@@ -7,7 +7,21 @@ function SuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const task = getTaskById(taskId);
-  const { formData } = location.state || {};
+
+  // Try navigation state first, fall back to localStorage
+  const formData = useMemo(() => {
+    if (location.state && location.state.formData) {
+      return location.state.formData;
+    }
+    // Fallback: read from localStorage (survives page refresh)
+    try {
+      const saved = localStorage.getItem(`cnslr-success-${taskId}`);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Error reading saved form data:', e);
+    }
+    return null;
+  }, [location.state, taskId]);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [showEfileModal, setShowEfileModal] = useState(false);
@@ -17,7 +31,7 @@ function SuccessPage() {
       <div className="wizard-container">
         <div className="wizard-content" style={{ textAlign: 'center', padding: '3rem' }}>
           <h2>Session Expired</h2>
-          <p style={{ color: 'var(--gray-500)', marginBottom: '2rem' }}>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
             Your session has expired. Please start a new submission.
           </p>
           <Link to="/" className="btn btn-primary">Start Over</Link>
@@ -28,19 +42,13 @@ function SuccessPage() {
 
   const handleDownload = async (format) => {
     setIsGenerating(true);
-
     try {
-      // In production, this would call the backend API to generate documents
-      // For demo, we'll simulate the generation
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Create a mock document download
       const documentContent = generateDocumentPreview(format);
-
       const blob = new Blob([documentContent], {
         type: format === 'pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       });
-
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -49,7 +57,6 @@ function SuccessPage() {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-
       alert(`Your ${format.toUpperCase()} document has been downloaded!`);
     } catch (error) {
       console.error('Download error:', error);
@@ -60,10 +67,9 @@ function SuccessPage() {
   };
 
   const generateDocumentPreview = (format) => {
-    // Generate a text preview of the document
     let content = `
 ================================================================================
-                              CNSLR LEGAL DOCUMENT
+                          CNSLR LEGAL DOCUMENT
 ================================================================================
 
 Document Type: ${task.title}
@@ -71,10 +77,8 @@ Generated: ${new Date().toLocaleString()}
 Reference: CNSLR-${taskId.toUpperCase()}-${Date.now()}
 
 --------------------------------------------------------------------------------
-
 `;
 
-    // Add form data
     Object.entries(formData).forEach(([key, value]) => {
       const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
       content += `${label}: ${value}\n`;
@@ -82,10 +86,8 @@ Reference: CNSLR-${taskId.toUpperCase()}-${Date.now()}
 
     content += `
 --------------------------------------------------------------------------------
-
 NOTICE: This document was generated using CNSLR. Please review all information
 for accuracy before submitting to the appropriate authority.
-
 ================================================================================
 `;
 
@@ -175,11 +177,11 @@ for accuracy before submitting to the appropriate authority.
     <div className="wizard-container">
       <div className="wizard-content">
         <div className="success-container">
-          <div className="success-icon">✓</div>
+          <div className="success-icon">\u2713</div>
           <h2>Your Documents Are Ready!</h2>
           <p>
-            We've prepared your {task.title.toLowerCase()} documents based on your information.
-            Download them below to proceed with your submission.
+            We've prepared your {task.title.toLowerCase()} documents based on your
+            information. Download them below to proceed with your submission.
           </p>
 
           <div className="download-options">
@@ -188,14 +190,14 @@ for accuracy before submitting to the appropriate authority.
               onClick={() => handleDownload('pdf')}
               disabled={isGenerating}
             >
-              📄 Download PDF
+              \uD83D\uDCC4 Download PDF
             </button>
             <button
               className="btn btn-secondary btn-lg"
               onClick={() => handleDownload('docx')}
               disabled={isGenerating}
             >
-              📝 Download Word
+              \uD83D\uDCDD Download Word
             </button>
             {task.eFileAvailable && (
               <button
@@ -203,34 +205,26 @@ for accuracy before submitting to the appropriate authority.
                 onClick={handleEfile}
                 disabled={isGenerating}
               >
-                ⚡ E-File Now
+                \u26A1 E-File Now
               </button>
             )}
           </div>
         </div>
 
         <div style={{ marginTop: '3rem' }}>
-          <h3 style={{ marginBottom: '1.5rem' }}>📋 Next Steps</h3>
+          <h3 style={{ marginBottom: '1.5rem' }}>\uD83D\uDCCB Next Steps</h3>
 
           <div className="info-box" style={{ marginBottom: '1.5rem' }}>
-            <span className="info-icon">⏰</span>
+            <span className="info-icon">\u23F0</span>
             <div className="info-content">
               <p><strong>Important Deadline:</strong> {nextSteps.deadline}</p>
             </div>
           </div>
 
-          <div style={{
-            background: 'var(--gray-50)',
-            borderRadius: '8px',
-            padding: '1.5rem',
-            marginBottom: '1.5rem'
-          }}>
+          <div style={{ background: 'var(--bg-tertiary)', borderRadius: '8px', padding: '1.5rem', marginBottom: '1.5rem' }}>
             <ol style={{ paddingLeft: '1.5rem', margin: 0 }}>
               {nextSteps.steps.map((step, idx) => (
-                <li key={idx} style={{
-                  padding: '0.5rem 0',
-                  color: 'var(--gray-700)'
-                }}>
+                <li key={idx} style={{ padding: '0.5rem 0', color: 'var(--text-secondary)' }}>
                   {step}
                 </li>
               ))}
@@ -238,7 +232,7 @@ for accuracy before submitting to the appropriate authority.
           </div>
 
           <div className="info-box success">
-            <span className="info-icon">💡</span>
+            <span className="info-icon">\uD83D\uDCA1</span>
             <div className="info-content">
               <p><strong>Pro Tip:</strong> {nextSteps.tip}</p>
             </div>
@@ -248,20 +242,17 @@ for accuracy before submitting to the appropriate authority.
         <div style={{
           marginTop: '2rem',
           paddingTop: '2rem',
-          borderTop: '1px solid var(--gray-200)',
+          borderTop: '1px solid var(--border-color)',
           display: 'flex',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '1rem'
         }}>
           <Link to="/" className="btn btn-secondary">
-            ← Back to Home
+            \u2190 Back to Home
           </Link>
-          <button
-            className="btn btn-primary"
-            onClick={() => window.print()}
-          >
-            🖨️ Print This Page
+          <button className="btn btn-primary" onClick={() => window.print()}>
+            \uD83D\uDDA8\uFE0F Print This Page
           </button>
         </div>
       </div>
@@ -269,54 +260,39 @@ for accuracy before submitting to the appropriate authority.
       {/* E-File Modal */}
       {showEfileModal && (
         <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           background: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000
         }}>
           <div style={{
-            background: 'white',
-            borderRadius: '12px',
-            padding: '2rem',
-            maxWidth: '500px',
-            width: '90%'
+            background: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '12px', padding: '2rem',
+            maxWidth: '500px', width: '90%'
           }}>
-            <h3 style={{ marginBottom: '1rem' }}>⚡ E-File Your Documents</h3>
-            <p style={{ color: 'var(--gray-600)', marginBottom: '1.5rem' }}>
-              E-filing allows you to submit your documents electronically to the appropriate authority.
-              This feature is coming soon for your jurisdiction.
+            <h3 style={{ marginBottom: '1rem' }}>\u26A1 E-File Your Documents</h3>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+              E-filing allows you to submit your documents electronically to the
+              appropriate authority. This feature is coming soon for your jurisdiction.
             </p>
-
             <div className="info-box warning" style={{ marginBottom: '1.5rem' }}>
-              <span className="info-icon">🔧</span>
+              <span className="info-icon">\uD83D\uDD27</span>
               <div className="info-content">
                 <p>
-                  <strong>Coming Soon:</strong> We're working on integrating with local court
-                  e-filing systems. Sign up to be notified when it's available in your area.
+                  <strong>Coming Soon:</strong> We're working on integrating with local
+                  court e-filing systems. Sign up to be notified when it's available in your area.
                 </p>
               </div>
             </div>
-
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowEfileModal(false)}
-              >
+              <button className="btn btn-secondary" onClick={() => setShowEfileModal(false)}>
                 Close
               </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  alert('You\'ll be notified when e-filing is available!');
-                  setShowEfileModal(false);
-                }}
-              >
+              <button className="btn btn-primary" onClick={() => {
+                alert("You'll be notified when e-filing is available!");
+                setShowEfileModal(false);
+              }}>
                 Notify Me
               </button>
             </div>
