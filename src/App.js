@@ -17,7 +17,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/task/:taskId" element={<TaskWizard />} />
-          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/success/:taskId" element={<SuccessPage />} />
         </Routes>
       </div>
     </Router>
