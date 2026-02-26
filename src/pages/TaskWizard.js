@@ -233,7 +233,7 @@ function TaskWizard() {
 
         return {
           label: field.label,
-          value: displayValue || '\u2014'
+          value: displayValue || '—'
         };
       });
 
@@ -243,7 +243,7 @@ function TaskWizard() {
     return (
       <div>
         <div className="info-box success" style={{ marginBottom: '2rem' }}>
-          <span className="info-icon">\u2705</span>
+          <span className="info-icon">✅</span>
           <div className="info-content">
             <p><strong>You're almost done!</strong> Review your information below. You can go back to make changes if needed.</p>
           </div>
@@ -262,7 +262,7 @@ function TaskWizard() {
         ))}
 
         <div className="info-box" style={{ marginTop: '2rem' }}>
-          <span className="info-icon">\u2139\uFE0F</span>
+          <span className="info-icon">ℹ️</span>
           <div className="info-content">
             <p>
               <strong>What happens next?</strong> After submission, you'll receive your documents ready for
@@ -296,7 +296,7 @@ function TaskWizard() {
               className={`step-item ${idx === currentStepIndex ? 'active' : ''} ${idx < currentStepIndex ? 'completed' : ''}`}
             >
               <div className="step-circle">
-                {idx < currentStepIndex ? '\u2713' : idx + 1}
+                {idx < currentStepIndex ? '✓' : idx + 1}
               </div>
               <span className="step-label">{step.title}</span>
             </div>
@@ -322,7 +322,7 @@ function TaskWizard() {
               className="btn btn-secondary"
               onClick={currentStepIndex === 0 ? () => navigate('/') : handleBack}
             >
-              {currentStepIndex === 0 ? '\u2190 Exit' : '\u2190 Back'}
+              {currentStepIndex === 0 ? '← Exit' : '← Back'}
             </button>
 
             <button
@@ -333,9 +333,9 @@ function TaskWizard() {
               {isSubmitting ? (
                 'Processing...'
               ) : isLastStep ? (
-                <>Submit & Generate Documents \uD83D\uDCC4</>
+                <>Submit & Generate Documents 📄</>
               ) : (
-                <>Continue \u2192</>
+                <>Continue →</>
               )}
             </button>
           </div>
@@ -346,3 +346,4 @@ function TaskWizard() {
 }
 
 export default TaskWizard;
+
