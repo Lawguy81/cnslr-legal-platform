@@ -23,6 +23,14 @@
       "dest": "/api/efile-status.js"
     },
     {
+      "src": "/api/submit-appeal",
+      "dest": "/api/submit-appeal.js"
+    },
+    {
+      "src": "/api/appeal-status",
+      "dest": "/api/appeal-status.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/build/$1"
     }
