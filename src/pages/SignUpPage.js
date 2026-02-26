@@ -56,26 +56,5 @@ function SignUpPage() {
   );
 }
 
-export default SignUpPage;    footer: { color: '#8b949e', fontSize: 13, textAlign: 'center', marginTop: 16 },
-  };
-
-  return (
-    <div style={s.page}>
-      <div style={s.card}>
-        <h1 style={s.title}>Create Account</h1>
-        <p style={s.subtitle}>Start fighting your parking ticket</p>
-        {error && <div style={s.error}>{error}</div>}
-        <form onSubmit={handleSignUp}>
-          <label style={s.label}>Email</label>
-          <input style={s.input} type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-          <label style={s.label}>Password</label>
-          <input style={s.input} type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-          <button style={s.btn} type="submit" disabled={loading}>{loading ? 'Creating...' : 'Sign Up'}</button>
-        </form>
-        <p style={s.footer}>Already have an account? <Link to="/login" style={s.link}>Log in</Link></p>
-      </div>
-    </div>
-  );
-}
-
 export default SignUpPage;
+
