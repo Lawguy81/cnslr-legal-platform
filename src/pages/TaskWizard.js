@@ -57,13 +57,11 @@ function TaskWizard() {
   const validateStep = () => {
     const fields = task.fields[currentStep.id] || [];
     const newErrors = {};
-
     fields.forEach(field => {
       if (field.required && !formData[field.name]) {
         newErrors[field.name] = 'This field is required';
       }
     });
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -73,7 +71,6 @@ function TaskWizard() {
       handleSubmit();
       return;
     }
-
     if (validateStep()) {
       setCurrentStepIndex(prev => Math.min(prev + 1, task.steps.length - 1));
       window.scrollTo(0, 0);
@@ -87,13 +84,15 @@ function TaskWizard() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-
     try {
       // In production, this would call the backend API
       // For now, we'll simulate a submission
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Clear saved progress
+      // Save form data for success page (survives page refresh)
+      localStorage.setItem(`cnslr-success-${taskId}`, JSON.stringify(formData));
+
+      // Clear wizard progress
       localStorage.removeItem(`cnslr-${taskId}`);
 
       // Navigate to success page
@@ -234,20 +233,17 @@ function TaskWizard() {
 
         return {
           label: field.label,
-          value: displayValue || '—'
+          value: displayValue || '\u2014'
         };
       });
 
-      return {
-        title: step.title,
-        items
-      };
+      return { title: step.title, items };
     });
 
     return (
       <div>
         <div className="info-box success" style={{ marginBottom: '2rem' }}>
-          <span className="info-icon">✅</span>
+          <span className="info-icon">\u2705</span>
           <div className="info-content">
             <p><strong>You're almost done!</strong> Review your information below. You can go back to make changes if needed.</p>
           </div>
@@ -266,7 +262,7 @@ function TaskWizard() {
         ))}
 
         <div className="info-box" style={{ marginTop: '2rem' }}>
-          <span className="info-icon">ℹ️</span>
+          <span className="info-icon">\u2139\uFE0F</span>
           <div className="info-content">
             <p>
               <strong>What happens next?</strong> After submission, you'll receive your documents ready for
@@ -300,7 +296,7 @@ function TaskWizard() {
               className={`step-item ${idx === currentStepIndex ? 'active' : ''} ${idx < currentStepIndex ? 'completed' : ''}`}
             >
               <div className="step-circle">
-                {idx < currentStepIndex ? '✓' : idx + 1}
+                {idx < currentStepIndex ? '\u2713' : idx + 1}
               </div>
               <span className="step-label">{step.title}</span>
             </div>
@@ -326,7 +322,7 @@ function TaskWizard() {
               className="btn btn-secondary"
               onClick={currentStepIndex === 0 ? () => navigate('/') : handleBack}
             >
-              {currentStepIndex === 0 ? '← Exit' : '← Back'}
+              {currentStepIndex === 0 ? '\u2190 Exit' : '\u2190 Back'}
             </button>
 
             <button
@@ -337,9 +333,9 @@ function TaskWizard() {
               {isSubmitting ? (
                 'Processing...'
               ) : isLastStep ? (
-                <>Submit & Generate Documents 📄</>
+                <>Submit & Generate Documents \uD83D\uDCC4</>
               ) : (
-                <>Continue →</>
+                <>Continue \u2192</>
               )}
             </button>
           </div>
