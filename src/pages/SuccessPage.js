@@ -177,7 +177,7 @@ for accuracy before submitting to the appropriate authority.
     <div className="wizard-container">
       <div className="wizard-content">
         <div className="success-container">
-          <div className="success-icon">\u2713</div>
+          <div className="success-icon">✓</div>
           <h2>Your Documents Are Ready!</h2>
           <p>
             We've prepared your {task.title.toLowerCase()} documents based on your
@@ -190,14 +190,14 @@ for accuracy before submitting to the appropriate authority.
               onClick={() => handleDownload('pdf')}
               disabled={isGenerating}
             >
-              \uD83D\uDCC4 Download PDF
+              📄 Download PDF
             </button>
             <button
               className="btn btn-secondary btn-lg"
               onClick={() => handleDownload('docx')}
               disabled={isGenerating}
             >
-              \uD83D\uDCDD Download Word
+              📝 Download Word
             </button>
             {task.eFileAvailable && (
               <button
@@ -205,17 +205,17 @@ for accuracy before submitting to the appropriate authority.
                 onClick={handleEfile}
                 disabled={isGenerating}
               >
-                \u26A1 E-File Now
+                ⚡ E-File Now
               </button>
             )}
           </div>
         </div>
 
         <div style={{ marginTop: '3rem' }}>
-          <h3 style={{ marginBottom: '1.5rem' }}>\uD83D\uDCCB Next Steps</h3>
+          <h3 style={{ marginBottom: '1.5rem' }}>📋 Next Steps</h3>
 
           <div className="info-box" style={{ marginBottom: '1.5rem' }}>
-            <span className="info-icon">\u23F0</span>
+            <span className="info-icon">⏰</span>
             <div className="info-content">
               <p><strong>Important Deadline:</strong> {nextSteps.deadline}</p>
             </div>
@@ -232,7 +232,7 @@ for accuracy before submitting to the appropriate authority.
           </div>
 
           <div className="info-box success">
-            <span className="info-icon">\uD83D\uDCA1</span>
+            <span className="info-icon">💡</span>
             <div className="info-content">
               <p><strong>Pro Tip:</strong> {nextSteps.tip}</p>
             </div>
@@ -249,10 +249,10 @@ for accuracy before submitting to the appropriate authority.
           gap: '1rem'
         }}>
           <Link to="/" className="btn btn-secondary">
-            \u2190 Back to Home
+            ← Back to Home
           </Link>
           <button className="btn btn-primary" onClick={() => window.print()}>
-            \uD83D\uDDA8\uFE0F Print This Page
+            🖨️ Print This Page
           </button>
         </div>
       </div>
@@ -271,13 +271,13 @@ for accuracy before submitting to the appropriate authority.
             borderRadius: '12px', padding: '2rem',
             maxWidth: '500px', width: '90%'
           }}>
-            <h3 style={{ marginBottom: '1rem' }}>\u26A1 E-File Your Documents</h3>
+            <h3 style={{ marginBottom: '1rem' }}>⚡ E-File Your Documents</h3>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
               E-filing allows you to submit your documents electronically to the
               appropriate authority. This feature is coming soon for your jurisdiction.
             </p>
             <div className="info-box warning" style={{ marginBottom: '1.5rem' }}>
-              <span className="info-icon">\uD83D\uDD27</span>
+              <span className="info-icon">🔧</span>
               <div className="info-content">
                 <p>
                   <strong>Coming Soon:</strong> We're working on integrating with local
@@ -304,3 +304,4 @@ for accuracy before submitting to the appropriate authority.
 }
 
 export default SuccessPage;
+
