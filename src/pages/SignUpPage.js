@@ -1,66 +1,59 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { signUp, signInWithGoogle } from '../lib/supabase';
+import { useNavigate, Link } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
 
 function SignUpPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    const { error } = await signUp(email, password, fullName);
-    if (error) {
-      setError(error.message);
+    setError(null);
+    try {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setLoading(false);
-    } else {
-      setSuccess(true);
     }
   };
 
-  const handleGoogleSignUp = async () => {
-    const { error } = await signInWithGoogle();
-    if (error) setError(error.message);
+  const s = {
+    page: { minHeight: '100vh', background: '#0d1117', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'system-ui, sans-serif' },
+    card: { background: '#161b22', borderRadius: 12, padding: 40, width: 400, border: '1px solid #30363d' },
+    title: { color: '#e6edf3', fontSize: 24, marginBottom: 8, textAlign: 'center' },
+    subtitle: { color: '#8b949e', fontSize: 14, textAlign: 'center', marginBottom: 24 },
+    label: { color: '#e6edf3', fontSize: 14, display: 'block', marginBottom: 6 },
+    input: { width: '100%', padding: '10px 12px', background: '#0d1117', border: '1px solid #30363d', borderRadius: 8, color: '#e6edf3', fontSize: 14, marginBottom: 16, boxSizing: 'border-box' },
+    btn: { width: '100%', padding: 12, background: '#58a6ff', color: '#fff', border: 'none', borderRadius: 8, fontSize: 16, fontWeight: 600, cursor: 'pointer' },
+    error: { background: '#f8514926', border: '1px solid #f85149', color: '#f85149', padding: 10, borderRadius: 8, fontSize: 13, marginBottom: 16 },
+    link: { color: '#58a6ff', textDecoration: 'none' },
+    footer: { color: '#8b949e', fontSize: 13, textAlign: 'center', marginTop: 16 },
   };
 
-  if (success) {
-    return (
-      <div className="auth-container">
-        <div className="auth-card">
-          <h2>Check Your Email</h2>
-          <p>We sent a confirmation link to {email}</p>
-          <Link to="/login" className="btn-primary">Go to Login</Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Create Account</h2>
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit" className="btn-primary" disabled={loading}>{loading ? 'Creating...' : 'Sign Up'}</button>
+    <div style={s.page}>
+      <div style={s.card}>
+        <h1 style={s.title}>Create Account</h1>
+        <p style={s.subtitle}>Start fighting your parking ticket</p>
+        {error && <div style={s.error}>{error}</div>}
+        <form onSubmit={handleSignUp}>
+          <label style={s.label}>Email</label>
+          <input style={s.input} type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+          <label style={s.label}>Password</label>
+          <input style={s.input} type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <button style={s.btn} type="submit" disabled={loading}>{loading ? 'Creating...' : 'Sign Up'}</button>
         </form>
-        <div className="auth-divider"><span>or</span></div>
-        <button onClick={handleGoogleSignUp} className="btn-google">Continue with Google</button>
-        <p className="auth-link">Already have an account? <Link to="/login">Log in</Link></p>
+        <p style={s.footer}>Already have an account? <Link to="/login" style={s.link}>Log in</Link></p>
       </div>
     </div>
   );
-}
-
-export default SignUpPage;
 }
 
 export default SignUpPage;
